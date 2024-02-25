@@ -13,7 +13,7 @@ https://miro.com/app/board/uXjVNp7X9-Q=/?share_link_id=311174246871
 
 1)
 Сделал первую домашку в Miro и прикладываю на неё ссылку. 
-https://miro.com/app/board/uXjVNp7X9-Q=/?share_link_id=311174246871
+https://miro.com/app/board/uXjVNoiBJF8=/?share_link_id=63488244355
 Ещё раз спасибо за курс Анализа Систем !
 
 Описание скопирую с нулевой домашки, так как мысли те же:
