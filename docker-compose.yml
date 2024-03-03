@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - "5442:5432"
+    environment:
+      POSTGRES_PASSWORD: jetpopuglo
+  redis:
+    image: redis:5-alpine
+    restart: always 
+    ports:
+      - "6389:6379"
+    volumes:
+      - redis:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis:
