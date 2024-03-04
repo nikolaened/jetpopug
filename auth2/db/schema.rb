@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_03_151912) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "account_roles", ["admin", "accounting_clerk", "repairman", "employee"]
+  create_enum "account_roles", ["admin", "manager", "accounting_clerk", "lead", "employee"]
 
   create_table "accounts", force: :cascade do |t|
     t.string "email", default: "", null: false

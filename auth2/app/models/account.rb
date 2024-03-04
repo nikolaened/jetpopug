@@ -6,9 +6,10 @@ class Account < ApplicationRecord
 
   enum role: {
     admin: 'admin',
+    manager: 'manager',
     accounting_clerk: 'accounting_clerk',
-    repairman: 'repairman',
-    employee: 'employee'
+    lead: 'lead',
+    employee: 'employee',
   }
 
   has_many :access_grants,
