@@ -1,0 +1,22 @@
+<div id="<%= dom_id task %>">
+  <p>
+    <strong>Description:</strong>
+    <%= task.description %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= task.status %>
+  </p>
+
+  <p>
+    <strong>Finished at:</strong>
+    <%= task.finished_at || "-" %>
+  </p>
+
+  <p>
+    <strong>Account:</strong>
+    <%= task.account.name %>
+  </p>
+
+</div>
