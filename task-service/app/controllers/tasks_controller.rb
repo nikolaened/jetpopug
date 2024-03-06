@@ -1,10 +1,20 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
-  helper_method :assign_task, :complete_task
 
   # GET /tasks or /tasks.json
   def index
-    @tasks = Task.all
+    if current_account
+      # redirect_to new_account_session_path unless current_account.present?
+      @tasks = if current_account.admin? || current_account.manager? || current_account.lead?
+                 Task.all
+               elsif current_account.employee?
+                 Task.where(account_id: current_account.id)
+               else
+                 Task.none
+               end
+    else
+      redirect_to new_account_session_path
+    end
   end
 
   # GET /tasks/1 or /tasks/1.json
@@ -57,6 +67,15 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: "Task was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  def reassign_tasks
+    TaskManagement.reassign_tasks
+
+    respond_to do |format|
+      format.html { redirect_to tasks_url, notice: "Tasks were successfully reassigned." }
       format.json { head :no_content }
     end
   end

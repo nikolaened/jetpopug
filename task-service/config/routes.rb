@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :tasks
   devise_for :accounts
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -9,4 +8,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "tasks#index"
+
+  resources :tasks do
+    collection do
+      get :reassign_tasks
+    end
+  end
 end

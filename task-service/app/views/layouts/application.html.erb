@@ -14,5 +14,7 @@
     <p class="alert"><%= alert %></p>
 
     <%= yield %>
+
+    <%= button_to('Logout', destroy_account_session_path, method: :delete) %>
   </body>
 </html>

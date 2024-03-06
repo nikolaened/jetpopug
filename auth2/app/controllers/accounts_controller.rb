@@ -33,7 +33,8 @@ class AccountsController < ApplicationController
             public_id: @account.public_id,
             full_name: @account.full_name,
             email: @account.email,
-            position: @account.position
+            position: @account.position,
+            role: @account.role
           }
         }
         KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
