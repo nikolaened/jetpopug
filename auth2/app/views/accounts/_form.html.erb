@@ -16,7 +16,11 @@
   </div>
 
   <div>
-    <%= form.select(:role, [['Admin', 'admin'], ['Accounting clerk', 'accounting_clerk'], ['Repairman', 'repairman'], ['Employee', 'employee']]) %>
+    <%= form.select(:role, [['Admin', 'admin'],
+                            ['Accounting clerk', 'accounting_clerk'],
+                            ['Manager', 'manager'],
+                            ['Lead', 'lead'],
+                            ['Employee', 'employee']]) %>
   </div>
 
   <div class="actions">

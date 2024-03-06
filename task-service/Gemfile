@@ -62,3 +62,6 @@ group :development do
   # gem "spring"
 end
 
+
+gem "karafka", "~> 2.3"
+gem "activerecord-import"
