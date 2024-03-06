@@ -1,9 +1,10 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :login_required
 
   # GET /tasks or /tasks.json
   def index
-    if current_account
+    # if current_account
       # redirect_to new_account_session_path unless current_account.present?
       @tasks = if current_account.admin? || current_account.manager? || current_account.lead?
                  Task.all
@@ -12,9 +13,9 @@ class TasksController < ApplicationController
                else
                  Task.none
                end
-    else
-      redirect_to new_account_session_path
-    end
+    # else
+    #   redirect_to new_account_session_path
+    # end
   end
 
   # GET /tasks/1 or /tasks/1.json

@@ -14,4 +14,12 @@ Rails.application.routes.draw do
       get :reassign_tasks
     end
   end
+
+  # omniauth
+
+  get '/auth/:provider/callback' => 'accounts#create'
+  get '/auth/failure' => 'accounts#failure'
+
+  # Custom logout
+  get '/logout', :to => 'accounts#destroy'
 end

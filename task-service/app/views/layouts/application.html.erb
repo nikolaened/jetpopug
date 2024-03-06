@@ -15,6 +15,6 @@
 
     <%= yield %>
 
-    <%= button_to('Logout', destroy_account_session_path, method: :delete) %>
+    <p><%= button_to "Logout 1", "/logout", method: :get, data: { turbo: false } %></p>
   </body>
 </html>
