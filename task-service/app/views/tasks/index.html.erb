@@ -3,7 +3,9 @@
 <h1>Tasks</h1>
 
 <div id="reassign-button">
-  <%= link_to "Reassign all incompleted tasks", reassign_tasks_tasks_path %>
+  <% if current_account.manager? || current_account.admin? %>
+    <%= link_to "Reassign all incompleted tasks", reassign_tasks_tasks_path %>
+  <% end %>
 </div>
 
 <div id="tasks">
