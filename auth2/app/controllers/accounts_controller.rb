@@ -27,6 +27,29 @@ class AccountsController < ApplicationController
       new_role = @account.role != account_params[:role] ? account_params[:role] : nil
 
       if @account.update(account_params)
+        event = {
+          event_name: 'AccountUpdated',
+          data: {
+            public_id: @account.public_id,
+            full_name: @account.full_name,
+            email: @account.email,
+            position: @account.position,
+            role: @account.role
+          }
+        }
+        KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+
+        if new_role
+          event = {
+            event_name: 'AccountRoleChanged',
+            data: {
+              public_id: @account.public_id,
+              role: new_role
+            }
+          }
+          KAFKA_PRODUCER.produce_sync(topic: 'account', payload: event.to_json)
+        end
+
         format.html { redirect_to root_path, notice: 'Account was successfully updated.' }
         format.json { render :index, status: :ok, location: @account }
       else
@@ -41,11 +64,23 @@ class AccountsController < ApplicationController
   #
   # in DELETE action, CUD event
   def destroy
-    @account.update(active: false, disabled_at: Time.now)
-
     respond_to do |format|
-      format.html { redirect_to root_path, notice: 'Account was successfully destroyed.' }
-      format.json { head :no_content }
+      if @account.update(active: false, disabled_at: Time.now)
+        event = {
+          event_name: 'AccountDeactivated',
+          data: {
+            public_id: @account.public_id,
+            disabled_at: @account.disabled_at
+          }
+        }
+        KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+
+        format.html { redirect_to root_path, notice: 'Account was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to root_path }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
+      end
     end
   end
 

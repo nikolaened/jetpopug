@@ -16,15 +16,17 @@
     <%= form.text_area :description %>
   </div>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.select :status, Task.statuses.keys.map { |key| [key.humanize, key] }, selected: @task.status || :assigned, disabled: @task.completed? %>
-  </div>
+  <% if task.persisted? %>
+    <div>
+      <%= form.label :status, style: "display: block" %>
+      <%= form.select :status, Task.statuses.keys.map { |key| [key.humanize, key] }, selected: @task.status || :assigned, disabled: @task.completed? %>
+    </div>
+  <% end %>
 
-  <div>
-    <%= form.label :account_id, style: "display: block" %>
-    <%= form.select :account_id, Account.employee.map { |acc| [acc.name, acc.id] }, selected: @task.account_id || Account.employee.pick(:id) %>
-  </div>
+<!--    <div>-->
+  <%#= form.label :account_id, style: "display: block" %>
+  <%#= form.select :account_id, Account.employee.map { |acc| [acc.name, acc.id] }, selected: @task.account_id || Account.employee.pick(:id) %>
+<!--    </div>-->
 
   <div>
     <%= form.submit %>

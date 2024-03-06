@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_05_115907) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_06_093214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_115907) do
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["account_id"], name: "index_tasks_on_account_id"
   end
 

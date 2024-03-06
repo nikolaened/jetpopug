@@ -62,3 +62,8 @@ group :development do
   # gem "spring"
 end
 
+
+gem "karafka", "~> 2.3"
+gem "activerecord-import"
+gem "omniauth-oauth2"
+gem "omniauth-rails_csrf_protection"

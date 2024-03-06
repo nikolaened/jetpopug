@@ -1,10 +1,21 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
-  helper_method :assign_task, :complete_task
+  before_action :login_required
 
   # GET /tasks or /tasks.json
   def index
-    @tasks = Task.all
+    # if current_account
+      # redirect_to new_account_session_path unless current_account.present?
+      @tasks = if current_account.admin? || current_account.manager? || current_account.lead?
+                 Task.all
+               elsif current_account.employee?
+                 Task.where(account_id: current_account.id)
+               else
+                 Task.none
+               end
+    # else
+    #   redirect_to new_account_session_path
+    # end
   end
 
   # GET /tasks/1 or /tasks/1.json
@@ -23,10 +34,20 @@ class TasksController < ApplicationController
   # POST /tasks or /tasks.json
   def create
     @task = Task.new(task_params)
-    TaskManagement.assign_task(@task)
+    TaskManagement.assign_task_on_create(@task)
 
     respond_to do |format|
       if @task.save
+        event = {
+          event_name: "TaskCreated",
+          data: {
+            public_id: @task.public_id,
+            assignee_public_id: @task.account.public_id,
+            created_at: @task.created_at.to_i
+          }
+        }
+        Karafka.producer.produce_sync(topic: 'task-workflow', payload: event.to_json)
+
         format.html { redirect_to task_url(@task), notice: "Task was successfully created." }
         format.json { render :show, status: :created, location: @task }
       else
@@ -42,6 +63,16 @@ class TasksController < ApplicationController
       @task.assign_attributes(task_params)
       TaskManagement.complete_task(@task) if @task.finished?
       if @task.save
+        event = {
+          event_name: "TaskCompleted",
+          data: {
+            public_id: @task.public_id,
+            last_assignee_public_id: @task.account.public_id,
+            completed_at: @task.finished_at.to_i
+          }
+        }
+        Karafka.producer.produce_sync(topic: 'task-workflow', payload: event.to_json)
+
         format.html { redirect_to task_url(@task), notice: "Task was successfully updated." }
         format.json { render :show, status: :ok, location: @task }
       else
@@ -57,6 +88,15 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: "Task was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  def reassign_tasks
+    TaskManagement.reassign_tasks
+
+    respond_to do |format|
+      format.html { redirect_to tasks_url, notice: "Tasks were successfully reassigned." }
       format.json { head :no_content }
     end
   end
