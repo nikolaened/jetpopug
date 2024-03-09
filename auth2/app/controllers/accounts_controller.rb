@@ -67,7 +67,7 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.update(active: false, disabled_at: Time.now)
         event = {
-          event_name: 'AccountDeactivated',
+          event_name: 'AccountDeleted',
           data: {
             public_id: @account.public_id,
             disabled_at: @account.disabled_at
