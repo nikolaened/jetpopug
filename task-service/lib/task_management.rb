@@ -3,7 +3,7 @@
 class TaskManagement
   class << self
 
-    def assign_task_on_create(task)
+    def create_task(task)
       assign_task(task)
     end
 

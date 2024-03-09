@@ -14,7 +14,7 @@ class AccountStreamingConsumer < ApplicationConsumer
         Account.create!(data.merge(password: "#{SecureRandom.hex}123"))
       when "AccountUpdated"
         Account.find_by_public_id(data["public_id"]).update!(data.slice(*Account::ALLOWED_UPDATE_ATTRIBUTES))
-      when "AccountDeactivated"
+      when "AccountDeleted"
         Account.find_by_public_id(data["public_id"]).update!(active: false, disabled_at: data["disabled_at"])
       else
         puts "Unsupported event"

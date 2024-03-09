@@ -24,7 +24,7 @@ class Account < ApplicationRecord
 
   after_commit :produce_create_event, on: :create
 
-  ATTRIBUTES_TO_STREAM = %w[public_id email created_at disabled_at role full_name position active]
+  ATTRIBUTES_TO_STREAM = %w[public_id email created_at role full_name position]
 
   def produce_create_event
     event = {
