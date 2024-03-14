@@ -28,6 +28,10 @@ class Account < ApplicationRecord
 
   def produce_create_event
     event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_time: Time.now.to_s,
+      producer: 'auth2-service',
       event_name: 'AccountCreated',
       data: self.attributes.slice(*ATTRIBUTES_TO_STREAM)
     }

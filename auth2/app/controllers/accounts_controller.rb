@@ -24,10 +24,12 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1.json
   def update
     respond_to do |format|
-      new_role = @account.role != account_params[:role] ? account_params[:role] : nil
-
       if @account.update(account_params)
         event = {
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'auth2-service',
           event_name: 'AccountUpdated',
           data: {
             public_id: @account.public_id,
@@ -38,17 +40,6 @@ class AccountsController < ApplicationController
           }
         }
         KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
-
-        if new_role
-          event = {
-            event_name: 'AccountRoleChanged',
-            data: {
-              public_id: @account.public_id,
-              role: new_role
-            }
-          }
-          KAFKA_PRODUCER.produce_sync(topic: 'account', payload: event.to_json)
-        end
 
         format.html { redirect_to root_path, notice: 'Account was successfully updated.' }
         format.json { render :index, status: :ok, location: @account }
