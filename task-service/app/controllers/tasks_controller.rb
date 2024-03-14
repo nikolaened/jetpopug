@@ -39,6 +39,10 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.save
         event = {
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'task-service',
           event_name: "TaskCreated",
           data: {
             public_id: @task.public_id,
@@ -48,6 +52,10 @@ class TasksController < ApplicationController
         Karafka.producer.produce_sync(topic: 'task-workflow', payload: event.to_json)
 
         event = {
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'task-service',
           event_name: "TaskCreated",
           data: {
             public_id: @task.public_id,
@@ -73,6 +81,10 @@ class TasksController < ApplicationController
       TaskManagement.complete_task(@task) if @task.finished?
       if @task.save
         event = {
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'task-service',
           event_name: "TaskCompleted",
           data: {
             public_id: @task.public_id,
