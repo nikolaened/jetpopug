@@ -67,6 +67,10 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.update(active: false, disabled_at: Time.now)
         event = {
+          event_id: SecureRandom.uuid,
+          event_version: 1,
+          event_time: Time.now.to_s,
+          producer: 'auth2-service',
           event_name: 'AccountDeleted',
           data: {
             public_id: @account.public_id,
