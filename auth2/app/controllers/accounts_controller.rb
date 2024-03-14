@@ -39,7 +39,12 @@ class AccountsController < ApplicationController
             role: @account.role
           }
         }
-        KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+        Rails.logger.info(event.to_json)
+        if SchemaRegistry.validate_event(event.to_json, 'accounts.updated').success?
+          KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+        else
+          raise StandardError.new("Event #{event[:event_id]} has invalid format")
+        end
 
         format.html { redirect_to root_path, notice: 'Account was successfully updated.' }
         format.json { render :index, status: :ok, location: @account }
@@ -68,7 +73,13 @@ class AccountsController < ApplicationController
             disabled_at: @account.disabled_at
           }
         }
-        KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+
+        Rails.logger.info(event.to_json)
+        if SchemaRegistry.validate_event(event.to_json, 'accounts.deleted').success?
+          KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+        else
+          raise StandardError.new("Event #{event[:event_id]} has invalid format")
+        end
 
         format.html { redirect_to root_path, notice: 'Account was successfully destroyed.' }
         format.json { head :no_content }
