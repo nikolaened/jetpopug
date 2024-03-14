@@ -39,3 +39,5 @@
 /auth2/.idea
 /task-service/.idea
 /billing-service/.idea
+/event_schema_registry/.idea
+/event_schema_registry/.DS_Store

@@ -9,6 +9,7 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.2"
 gem "devise"
 gem "doorkeeper"
 gem "waterdrop", "~> 2.6"
+gem 'schema_registry', path: '../event_schema_registry/ruby/'
 
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
