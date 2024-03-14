@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show ]
+  before_action :login_required
 
   # GET /tasks or /tasks.json
   def index
