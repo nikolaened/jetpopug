@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_06_093214) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_14_211926) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_093214) do
     t.datetime "updated_at", null: false
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["account_id"], name: "index_tasks_on_account_id"
+  end
+
+  create_table "unprocessed_events", force: :cascade do |t|
+    t.text "raw_event"
+    t.integer "status", default: 0, null: false
+    t.integer "retry_count"
+    t.datetime "next_retry_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_unprocessed_events_on_status"
   end
 
   add_foreign_key "tasks", "accounts"

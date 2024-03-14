@@ -35,7 +35,12 @@ class Account < ApplicationRecord
       event_name: 'AccountCreated',
       data: self.attributes.slice(*ATTRIBUTES_TO_STREAM)
     }
-    KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+    Rails.logger.info(event.to_json)
+    if SchemaRegistry.validate_event(event.to_json, 'accounts.created').success?
+      KAFKA_PRODUCER.produce_sync(topic: 'account-streaming', payload: event.to_json)
+    else
+      raise StandardError.new("Event #{event[:event_id]} has invalid format")
+    end
   end
 end
 
