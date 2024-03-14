@@ -51,7 +51,8 @@ class TasksController < ApplicationController
           event_name: "TaskCreated",
           data: {
             public_id: @task.public_id,
-            created_at: @task.created_at.to_i
+            created_at: @task.created_at.to_i,
+            description: @task.description
           }
         }
         Karafka.producer.produce_sync(topic: 'task-streaming', payload: event.to_json)
