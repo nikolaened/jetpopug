@@ -8,5 +8,12 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "tasks#index"
+
+  # omniauth
+  get '/auth/:provider/callback' => 'accounts#create'
+  get '/auth/failure' => 'accounts#failure'
+
+  # Custom logout
+  get '/logout', :to => 'accounts#destroy'
 end

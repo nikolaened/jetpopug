@@ -14,5 +14,7 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <%= yield %>
+
+    <p><%= button_to "Logout", "/logout", method: :get, data: { turbo: false } %></p>
   </body>
 </html>
