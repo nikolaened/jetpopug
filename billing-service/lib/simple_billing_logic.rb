@@ -1,9 +1,9 @@
 class SimpleBillingLogic
   class << self
     def create_deposit_transaction(account, value, identificator)
-      ActiveRecord::Transaction do
+      ActiveRecord::Base.transaction do
         balance_entity = account.balance
-        balance_entity.balance -= value
+        balance_entity.update!(balance: balance_entity.balance - value)
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
                             credit: 0, debit: value, transaction_type: 'deposit',
@@ -12,9 +12,9 @@ class SimpleBillingLogic
     end
 
     def create_payment_transaction(account, value, identificator)
-      ActiveRecord::Transaction do
+      ActiveRecord::Base.transaction do
         balance_entity = account.balance
-        balance_entity.balance += value
+        balance_entity.update!(balance: balance_entity.balance + value)
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
                             credit: value, debit: 0, transaction_type: 'payment',
@@ -23,9 +23,9 @@ class SimpleBillingLogic
     end
 
     def create_withdraw_transaction(account, value)
-      ActiveRecord::Transaction do
+      ActiveRecord::Base.transaction do
         balance_entity = account.balance
-        balance_entity.balance = 0
+        balance_entity.update!(balance: 0)
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
                             credit: value, debit: 0, transaction_type: 'withdraw',

@@ -12,17 +12,18 @@ class AccountStreamingConsumer < ApplicationConsumer
 
       case [event_name, event_version]
       when ["AccountCreated", 1], ["AccountCreated", nil]
-        with_validation(payload.to_json, 'accounts.created') { account_relation.create!(data) }
+        with_validation(payload.to_json, 'accounts.created') do
+          Account.transaction do
+            account = account_relation.create!(data)
+            Balance.create!(account: account)
+          end
+        end
       when ["AccountUpdated", 1], ["AccountUpdated", nil]
-        with_validation(payload.to_json, 'accounts.updated') do
-          account_relation.find_or_initialize_by(public_id: data["public_id"]).update!(data.slice(*Account::ALLOWED_UPDATE_ATTRIBUTES))
-        end
+        with_validation(payload.to_json, 'accounts.updated') { account_relation.find_or_initialize_by(public_id: data["public_id"]).update!(data.slice(*Account::ALLOWED_UPDATE_ATTRIBUTES)) }
       when ["AccountDeleted", 1], ["AccountDeleted", nil]
-        with_validation(payload.to_json, 'accounts.deleted') do
-          account_relation.find_by_public_id(data["public_id"]).update!(active: false, disabled_at: data["disabled_at"])
-        end
+        with_validation(payload.to_json, 'accounts.deleted') { account_relation.find_by_public_id(data["public_id"]).update!(active: false, disabled_at: data["disabled_at"]) }
       else
-        puts "Unsupported event"
+        handle_unprocessed(message)
       end
     end
   end

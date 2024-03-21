@@ -15,7 +15,7 @@ class TaskStreamingConsumer < ApplicationConsumer
         task.assign_attributes(description: data['description'], created_at: Time.at(data['created_at'] || Time.now.to_i))
         task.save!
       else
-        puts "Unsupported event"
+        handle_unprocessed(message)
       end
     end
   end

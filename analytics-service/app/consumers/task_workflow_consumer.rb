@@ -12,9 +12,9 @@ class TaskWorkflowConsumer < ApplicationConsumer
 
       case [event_name, event_version]
       when ["TaskAdded", 1], ["TaskAdded", nil]
-        account = Account.find_by_public_id(data['public_id'])
+        account = Account.find_by_public_id(data['assignee_public_id'])
         if account.blank?
-          puts "No associated account #{data['public_id']}"
+          puts "No associated account #{data['assignee_public_id']}"
         else
           task = Task.find_or_create_with_price(data['public_id'])
           task.assign_attributes(account_id: account.id)
@@ -24,7 +24,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
       when ["TaskAssigned", 1], ["TaskAssigned", nil]
         account = Account.find_by_public_id(data['assignee_public_id'])
         if account.blank?
-          puts "No associated account #{data['public_id']}"
+          puts "No associated account #{data['assignee_public_id']}"
         else
           task = Task.find_or_create_with_price(data['public_id'])
           task.assign_attributes(account_id: account.id)
@@ -34,13 +34,15 @@ class TaskWorkflowConsumer < ApplicationConsumer
       when ["TaskCompleted", 1], ["TaskCompleted", nil]
         account = Account.find_by_public_id(data['last_assignee_public_id'])
         if account.blank?
-          puts "No associated account #{data['public_id']}"
+          puts "No associated account #{data['last_assignee_public_id']}"
         else
           task = Task.find_or_create_with_price(data['public_id'])
+          task.assign_attributes(account_id: account.id)
+          task.save!
           SimpleBillingLogic.create_payment_transaction(account, task.price, task.public_id)
         end
       else
-        puts "Unsupported event"
+        handle_unprocessed(message)
       end
     end
   end

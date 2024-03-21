@@ -23,7 +23,7 @@ class AccountStreamingConsumer < ApplicationConsumer
       when ["AccountDeleted", 1], ["AccountDeleted", nil]
         with_validation(payload.to_json, 'accounts.deleted') { account_relation.find_by_public_id(data["public_id"]).update!(active: false, disabled_at: data["disabled_at"]) }
       else
-        puts "Unsupported event"
+        handle_unprocessed(message)
       end
     end
   end

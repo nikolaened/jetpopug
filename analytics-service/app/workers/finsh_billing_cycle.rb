@@ -3,7 +3,7 @@
 module Worker
   class FinshBillingCycle
     def self.process
-      ActiveRecord::Transaction do
+      ActiveRecord::Base.transaction do
         billing_cycle = BillingCycle.current_cycle
         Account.all.each do |account|
           account_balance = account.balance
