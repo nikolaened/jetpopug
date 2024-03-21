@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
 
-  "title": "Tasks.Workflow.Created.v1",
+  "title": "Tasks.Added.Created.v1",
   "description": "json schema for BE tasks events (version 1)",
 
   "definitions": {
@@ -27,7 +27,7 @@
   "properties": {
     "event_id":      { "type": "string" },
     "event_version": { "enum": [1] },
-    "event_name":    { "enum": ["TaskCreated"] },
+    "event_name":    { "enum": ["TaskAdded"] },
     "event_time":    { "type": "string" },
     "producer":      { "type": "string" },
 

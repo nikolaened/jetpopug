@@ -10,7 +10,7 @@ class TaskStreamingConsumer < ApplicationConsumer
       data = payload["data"]
 
       case event_name
-      when "TaskCreated"
+      when "TaskCreated.V1"
         task = Task.create_with({
                                   fee: rand(10..20),
                                   price: rand(20..40),

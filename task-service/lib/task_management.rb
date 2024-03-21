@@ -18,7 +18,7 @@ class TaskManagement
         assign_task(task)
         if task.account_id_changed?
           event = {
-            event_name: "TaskAssigned",
+            event_name: "TaskAssigned.V1",
             data: {
               task_public_id: task.public_id,
               assignee_public_id: task.account.public_id,
