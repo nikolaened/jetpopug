@@ -22,7 +22,7 @@ class TaskManagement
             event_version: 1,
             event_time: Time.now.to_s,
             producer: 'task-service',
-            event_name: "TaskAssigned.V1",
+            event_name: "TaskAssigned",
             data: {
               task_public_id: task.public_id,
               assignee_public_id: task.account.public_id,

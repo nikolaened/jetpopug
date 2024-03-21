@@ -43,7 +43,7 @@ class TasksController < ApplicationController
           event_version: 1,
           event_time: Time.now.to_s,
           producer: 'task-service',
-          event_name: "TaskAdded.V1",
+          event_name: "TaskAdded",
           data: {
             public_id: @task.public_id,
             assignee_public_id: @task.account.public_id
@@ -56,7 +56,7 @@ class TasksController < ApplicationController
           event_version: 1,
           event_time: Time.now.to_s,
           producer: 'task-service',
-          event_name: "TaskCreated.V1",
+          event_name: "TaskCreated",
           data: {
             public_id: @task.public_id,
             created_at: @task.created_at.to_i,
@@ -85,7 +85,7 @@ class TasksController < ApplicationController
           event_version: 1,
           event_time: Time.now.to_s,
           producer: 'task-service',
-          event_name: "TaskCompleted.V1",
+          event_name: "TaskCompleted",
           data: {
             public_id: @task.public_id,
             last_assignee_public_id: @task.account.public_id,

@@ -10,14 +10,14 @@ class AccountStreamingConsumer < ApplicationConsumer
       data = payload["data"]
 
       case event_name
-      when "AccountCreated.V1"
+      when "AccountCreated"
         Account.transaction do
           account = account_relation.create!(data)
           Balance.create!(account: account)
         end
-      when "AccountUpdated.V1"
+      when "AccountUpdated"
         account_relation.find_or_initialize_by(public_id: data["public_id"]).update!(data.slice(*Account::ALLOWED_UPDATE_ATTRIBUTES))
-      when "AccountDeleted.V1"
+      when "AccountDeleted"
         account_relation.find_by_public_id(data["public_id"]).update!(active: false, disabled_at: data["disabled_at"])
       else
         puts "Unsupported event"

@@ -10,7 +10,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
       data = payload["data"]
 
       case event_name
-      when "TaskAdded.V1"
+      when "TaskAdded"
         account = Account.find_by_public_id(data['public_id'])
         if account.blank?
           puts "No associated account #{data['public_id']}"
@@ -20,7 +20,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
           task.save!
           SimpleBillingLogic.create_deposit_transaction(account, task.fee, task.public_id)
         end
-      when "TaskAssigned.V1"
+      when "TaskAssigned"
         account = Account.find_by_public_id(data['assignee_public_id'])
         if account.blank?
           puts "No associated account #{data['public_id']}"
@@ -30,7 +30,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
           task.save!
           SimpleBillingLogic.create_deposit_transaction(account, task.fee, task.public_id)
         end
-      when "TaskCompleted.V1"
+      when "TaskCompleted"
         account = Account.find_by_public_id(data['last_assignee_public_id'])
         if account.blank?
           puts "No associated account #{data['public_id']}"

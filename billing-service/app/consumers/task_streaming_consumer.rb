@@ -10,7 +10,7 @@ class TaskStreamingConsumer < ApplicationConsumer
       data = payload["data"]
 
       case event_name
-      when "TaskCreated.V1"
+      when "TaskCreated"
         task = Task.find_or_create_with_price(data['public_id'])
         task.assign_attributes(description: data['description'], created_at: Time.at(data['created_at'] || Time.now.to_i))
         task.save!
