@@ -33,13 +33,3 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
-/.idea
-/*.idea
-/auth2/.idea
-/task-service/.idea
-/billing-service/.idea
-/event_schema_registry/.idea
-/event_schema_registry/.DS_Store
-*.DS_Store
-*.idea
