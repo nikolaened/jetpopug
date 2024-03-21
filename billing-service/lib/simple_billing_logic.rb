@@ -6,7 +6,7 @@ class SimpleBillingLogic
         balance_entity.balance -= value
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
-                            credit: 0, debit: value, type: 'deposit',
+                            credit: 0, debit: value, transaction_type: 'deposit',
                             description: "Receive fee from #{account.public_id} for task #{identificator} assignment")
       end
     end
@@ -17,7 +17,7 @@ class SimpleBillingLogic
         balance_entity.balance += value
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
-                            credit: value, debit: 0, type: 'payment',
+                            credit: value, debit: 0, transaction_type: 'payment',
                             description: "Pay price to #{account.public_id} for task #{identificator} assignment")
       end
     end
@@ -28,7 +28,7 @@ class SimpleBillingLogic
         balance_entity.balance = 0
         billing_cycle = BillingCycle.current_cycle
         Transaction.create!(account: account, billing_cycle: billing_cycle,
-                            credit: value, debit: 0, type: 'withdraw',
+                            credit: value, debit: 0, transaction_type: 'withdraw',
                             description: "Give cash to #{account.public_id}")
       end
     end

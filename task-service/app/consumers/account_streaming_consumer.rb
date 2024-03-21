@@ -24,8 +24,8 @@ class AccountStreamingConsumer < ApplicationConsumer
     end
   end
 
-  def with_validation(event, type, &block)
-    if SchemaRegistry.validate_event(event, type).success?
+  def with_validation(event, type, version: 1, &block)
+    if SchemaRegistry.validate_event(event, type, version: version).success?
       block.call
     else
       handle_unprocessed(event)

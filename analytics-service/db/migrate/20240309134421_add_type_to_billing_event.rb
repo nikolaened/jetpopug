@@ -3,11 +3,11 @@ class AddTypeToBillingEvent < ActiveRecord::Migration[7.1]
     execute <<-SQL
       CREATE TYPE billing_event_types AS ENUM ('withdraw', 'payment', 'deposit');
     SQL
-    add_column :billing_events, :type, :billing_event_types, null: false, default: 'deposit'
+    add_column :billing_events, :event_type, :billing_event_types, null: false, default: 'deposit'
   end
 
   def down
-    remove_column :billing_events, :type
+    remove_column :billing_events, :event_type
     execute <<-SQL
       DROP TYPE billing_event_types;
     SQL
