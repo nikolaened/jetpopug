@@ -15,11 +15,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
         if account.blank?
           puts "No associated account #{data['public_id']}"
         else
-          task = Task.create_with({
-                                    fee: rand(10..20),
-                                    price: rand(20..40),
-                                  }).
-            find_or_initialize_by(public_id: data['public_id'])
+          task = Task.find_or_create_with_price(data['public_id'])
           task.assign_attributes(account_id: account.id)
           task.save!
           SimpleBillingLogic.create_deposit_transaction(account, task.fee, task.public_id)
@@ -29,11 +25,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
         if account.blank?
           puts "No associated account #{data['public_id']}"
         else
-          task = Task.create_with({
-                                    fee: rand(10..20),
-                                    price: rand(20..40),
-                                  }).
-            find_or_initialize_by(public_id: data['public_id'])
+          task = Task.find_or_create_with_price(data['public_id'])
           task.assign_attributes(account_id: account.id)
           task.save!
           SimpleBillingLogic.create_deposit_transaction(account, task.fee, task.public_id)
@@ -43,11 +35,7 @@ class TaskWorkflowConsumer < ApplicationConsumer
         if account.blank?
           puts "No associated account #{data['public_id']}"
         else
-          task = Task.create_with({
-                                    fee: rand(10..20),
-                                    price: rand(20..40),
-                                  }).
-          find_or_initialize_by(public_id: data['public_id'])
+          task = Task.find_or_create_with_price(data['public_id'])
           SimpleBillingLogic.create_payment_transaction(account, task.price, task.public_id)
         end
       else

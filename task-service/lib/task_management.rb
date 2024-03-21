@@ -18,6 +18,10 @@ class TaskManagement
         assign_task(task)
         if task.account_id_changed?
           event = {
+            event_id: SecureRandom.uuid,
+            event_version: 1,
+            event_time: Time.now.to_s,
+            producer: 'task-service',
             event_name: "TaskAssigned.V1",
             data: {
               task_public_id: task.public_id,
