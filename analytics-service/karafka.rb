@@ -38,5 +38,8 @@ class KarafkaApp < Karafka::App
     topic 'task-workflow' do
       consumer TaskWorkflowConsumer
     end
+    topic 'task-pricing' do
+      consumer TaskPricingConsumer
+    end
   end
 end

@@ -11,28 +11,34 @@ class TaskWorkflowConsumer < ApplicationConsumer
 
       case [event_name, event_version]
       when ["TaskAdded", 1], ["TaskAdded", nil]
-        account = Account.find_by_public_id(data['assignee_public_id'])
-        if account.blank?
-          puts "No associated account #{data['assignee_public_id']}"
-        else
-          task = Task.find_or_create_by(data['public_id'])
-          AssigneeLogService.task_created_for(task, account)
+        with_validation(message, 'tasks.workflow.added') do
+          account = Account.find_by_public_id(data['assignee_public_id'])
+          if account.blank?
+            puts "No associated account #{data['assignee_public_id']}"
+          else
+            task = Task.find_or_create_by(data['public_id'])
+            AssigneeLogService.task_created_for(task, account)
+          end
         end
       when ["TaskAssigned", 1], ["TaskAssigned", nil]
-        account = Account.find_by_public_id(data['assignee_public_id'])
-        if account.blank?
-          puts "No associated account #{data['assignee_public_id']}"
-        else
-          task = Task.find_or_create_by(data['public_id'])
-          AssigneeLogService.task_assigned_to(task, account)
+        with_validation(message, 'tasks.workflow.assigned') do
+          account = Account.find_by_public_id(data['assignee_public_id'])
+          if account.blank?
+            puts "No associated account #{data['assignee_public_id']}"
+          else
+            task = Task.find_or_create_by(data['public_id'])
+            AssigneeLogService.task_assigned_to(task, account)
+          end
         end
       when ["TaskCompleted", 1], ["TaskCompleted", nil]
-        account = Account.find_by_public_id(data['last_assignee_public_id'])
-        if account.blank?
-          puts "No associated account #{data['last_assignee_public_id']}"
-        else
-          task = Task.find_or_create_by(data['public_id'])
-          AssigneeLogService.task_completed_by(task, account)
+        with_validation(message, 'tasks.workflow.completed') do
+          account = Account.find_by_public_id(data['last_assignee_public_id'])
+          if account.blank?
+            puts "No associated account #{data['last_assignee_public_id']}"
+          else
+            task = Task.find_or_create_by(data['public_id'])
+            AssigneeLogService.task_completed_by(task, account)
+          end
         end
       else
         handle_unprocessed(message)
