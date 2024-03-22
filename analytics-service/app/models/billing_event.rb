@@ -1,8 +1,7 @@
-class Transaction < ApplicationRecord
+class BillingEvent < ApplicationRecord
   belongs_to :account
-  belongs_to :billing_cycle
 
-  enum transaction_type: {
+  enum event_type: {
     withdraw: 'withdraw',
     payment: 'payment',
     deposit: 'deposit',

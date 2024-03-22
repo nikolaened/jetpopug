@@ -20,6 +20,7 @@ module Worker
                               opened: false)
         BillingCycle.create_cycle!
       end
+      AnalyticsEventsService.share_current_balances
     end
   end
 end

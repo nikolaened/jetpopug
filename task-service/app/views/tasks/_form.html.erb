@@ -16,6 +16,11 @@
     <%= form.text_area :description %>
   </div>
 
+  <div>
+    <%= form.label :jira_id, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
   <% if task.persisted? %>
     <div>
       <%= form.label :status, style: "display: block" %>

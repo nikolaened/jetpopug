@@ -43,7 +43,7 @@ class TasksController < ApplicationController
           event_version: 1,
           event_time: Time.now.to_s,
           producer: 'task-service',
-          event_name: "TaskCreated",
+          event_name: "TaskAdded",
           data: {
             public_id: @task.public_id,
             assignee_public_id: @task.account.public_id
@@ -53,14 +53,15 @@ class TasksController < ApplicationController
 
         event = {
           event_id: SecureRandom.uuid,
-          event_version: 1,
+          event_version: 2,
           event_time: Time.now.to_s,
           producer: 'task-service',
           event_name: "TaskCreated",
           data: {
             public_id: @task.public_id,
             created_at: @task.created_at.to_i,
-            description: @task.description
+            description: @task.description,
+            jira_id: @task.jira_id
           }
         }
         Karafka.producer.produce_sync(topic: 'task-streaming', payload: event.to_json)

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
 
-  "title": "Tasks.Workflow.Created.v1",
-  "description": "json schema for BE tasks events (version 1)",
+  "title": "Tasks.Pricing.PriceSet.v1",
+  "description": "json schema for tasks price update events (version 1)",
 
   "definitions": {
     "event_data": {
@@ -11,13 +11,17 @@
         "public_id": {
           "type": "string"
         },
-        "assignee_public_id": {
+        "price": {
+          "type": "string"
+        },
+        "fee": {
           "type": "string"
         }
       },
       "required": [
         "public_id",
-        "assignee_public_id"
+        "price",
+        "fee"
       ]
     }
   },
@@ -27,7 +31,7 @@
   "properties": {
     "event_id":      { "type": "string" },
     "event_version": { "enum": [1] },
-    "event_name":    { "enum": ["TaskCreated"] },
+    "event_name":    { "enum": ["TaskPriceSet"] },
     "event_time":    { "type": "string" },
     "producer":      { "type": "string" },
 

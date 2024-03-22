@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_09_135956) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_235823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_135956) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "jira_id"
     t.index ["account_id"], name: "index_tasks_on_account_id"
   end
 
@@ -91,9 +92,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_135956) do
     t.bigint "billing_cycle_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "type", default: "deposit", null: false, enum_type: "transaction_types"
+    t.enum "transaction_type", default: "deposit", null: false, enum_type: "transaction_types"
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["billing_cycle_id"], name: "index_transactions_on_billing_cycle_id"
+  end
+
+  create_table "unprocessed_events", force: :cascade do |t|
+    t.text "raw_event"
+    t.integer "status", default: 0, null: false
+    t.integer "retry_count"
+    t.datetime "next_retry_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_unprocessed_events_on_status"
   end
 
   add_foreign_key "balances", "accounts"
